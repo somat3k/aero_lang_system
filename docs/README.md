@@ -9,12 +9,15 @@
 | # | Document | Description |
 |---|----------|-------------|
 | 1 | [Whitepaper](./whitepaper.md) | Enterprise academic whitepaper — vision, theory, and formal specification |
-| 2 | [Architecture](./architecture.md) | Complete system architecture, component model, and data-flow diagrams |
-| 3 | [Design Principles](./design_principles.md) | Core philosophy, language tenets, and coding conventions |
-| 4 | [Getting Started](./getting_started.md) | Installation, first program, and guided project walkthrough |
-| 5 | [API Reference](./api_reference.md) | Comprehensive language & runtime API reference |
-| 6 | [Roadmap](./roadmap.md) | Phased development plan, milestones, and delivery schedule |
-| 7 | [Glossary](./glossary.md) | Terminology, acronyms, and concept definitions |
+| 2 | [Systems Stack](./systems_stack.md) | Full-stack blueprint: hardware → OS → network → runtime → application |
+| 3 | [OS Design](./os_design.md) | AeroOS — programming-oriented, capability-based operating system |
+| 4 | [Network Architecture](./network_architecture.md) | Lean, programmable network layer: data / control / management planes |
+| 5 | [Architecture](./architecture.md) | AERO runtime architecture, component model, and data-flow diagrams |
+| 6 | [Design Principles](./design_principles.md) | Core philosophy, language tenets, and coding conventions |
+| 7 | [Getting Started](./getting_started.md) | Installation, first program, and guided project walkthrough |
+| 8 | [API Reference](./api_reference.md) | Comprehensive language & runtime API reference |
+| 9 | [Roadmap](./roadmap.md) | Phased development plan, milestones, and delivery schedule |
+| 10 | [Glossary](./glossary.md) | Terminology, acronyms, and concept definitions |
 
 ---
 
@@ -34,14 +37,16 @@ AERO is not just a language — it is a *living system specification*: every pro
 ## Reading Order
 
 ```
-Whitepaper  →  Architecture  →  Design Principles
+Whitepaper → Systems Stack → OS Design → Network Architecture
      ↓               ↓
-Getting Started  →  API Reference
+ Architecture → Design Principles
      ↓
-   Roadmap  →  Glossary
+Getting Started → API Reference
+     ↓
+   Roadmap → Glossary
 ```
 
-New contributors should start with the **Whitepaper** to understand the motivation, then proceed to **Architecture** and **Design Principles** before writing any code.
+New contributors should start with the **Whitepaper** to understand the motivation, then proceed to **Systems Stack** for the full-stack blueprint, **OS Design** and **Network Architecture** for the infrastructure layer, and finally **Architecture** and **Design Principles** before writing any code.
 
 ---
 

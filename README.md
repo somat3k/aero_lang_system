@@ -13,14 +13,17 @@ All project documentation lives in the [`docs/`](./docs/) folder:
 | Document | Description |
 |----------|-------------|
 | [📄 Whitepaper](./docs/whitepaper.md) | Enterprise academic whitepaper — vision, theory, formal specification |
-| [🏗 Architecture](./docs/architecture.md) | System architecture, component model, and data-flow diagrams |
+| [🖥 Systems Stack](./docs/systems_stack.md) | Full-stack blueprint: hardware → OS → network → runtime → application |
+| [⚙️ OS Design](./docs/os_design.md) | AeroOS — programming-oriented, capability-based operating system |
+| [🌐 Network Architecture](./docs/network_architecture.md) | Lean, programmable network layer: data / control / management planes |
+| [🏗 Architecture](./docs/architecture.md) | AERO runtime: compiler pipeline, AVM, scheduler, GC, observability |
 | [📐 Design Principles](./docs/design_principles.md) | Core philosophy, language tenets, and coding conventions |
 | [🚀 Getting Started](./docs/getting_started.md) | Installation, first program, and guided project walkthrough |
 | [📚 API Reference](./docs/api_reference.md) | Comprehensive language and runtime API reference |
 | [🗺 Roadmap](./docs/roadmap.md) | Phased development plan, milestones, and delivery schedule |
 | [📖 Glossary](./docs/glossary.md) | Terminology, acronyms, and concept definitions |
 
-Start with the **[Whitepaper](./docs/whitepaper.md)** for the full vision, then follow the **[Getting Started guide](./docs/getting_started.md)** to write your first AERO program.
+Start with the **[Whitepaper](./docs/whitepaper.md)** for the full vision, then the **[Systems Stack](./docs/systems_stack.md)** for the hardware-to-application blueprint, then the **[Getting Started guide](./docs/getting_started.md)** to write your first AERO program.
 
 ---
 
