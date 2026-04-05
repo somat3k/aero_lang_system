@@ -116,13 +116,40 @@ This allows the compiler to enforce that programs are written in terms of their 
 
 Resources (file handles, network connections, allocated memory, external service tokens) are managed using **Linear Types**. A linear value must be used exactly once — it cannot be dropped or duplicated without explicit acknowledgement. This eliminates entire classes of resource leaks and use-after-free errors at compile time.
 
+### 4.5 The Knowledge Surface Model
+
+AERO introduces the concept of a **Knowledge Surface** — a structured, typed, always-fresh representation of everything the program knows about its world, shared across all agents that interact with it.
+
+Traditional programs model the world as data retrieved on demand (queries, API calls). AERO programs instead *hold knowledge* — active, continuously-reconciled world-type bindings — and *share that knowledge* proactively with all agents that have declared interest in it.
+
+This distinction has formal consequences:
+
+- A `world<W>` binding is not a snapshot; it is a **live view** with a declared consistency model.
+- An `emit(delta)` operation is not a write; it is a **knowledge assertion** propagated to all subscribers.
+- A micro-environment is not a copy of the program; it is an **isolated capability context** that accesses the same original knowledge substrate.
+
+The Knowledge Surface model unifies what traditionally requires three separate systems (database, event bus, cache) into a single typed, observable, capability-controlled abstraction.
+
 ---
 
 ## 5. Language Overview
 
-### 5.1 Basic Syntax
+### 5.1 Language Identity
 
-AERO syntax is inspired by Rust, Swift, and ML, aiming for clarity and precision:
+AERO is its own language — not a variant of Rust, Go, or any other system. Its syntax is designed to express AERO concepts directly: knowledge, autonomy, world-interaction, and adaptivity. See the [Language Identity](./language_identity.md) document for the complete identity specification.
+
+The most visible syntactic distinction is the `know` binding keyword — AERO's replacement for Rust-style `let`. In AERO, programs **assert knowledge** rather than request variable slots:
+
+```aero
+// AERO: the program asserts what it knows
+know temperature = sensor.observe();
+know celsius     = convert_to_celsius(temperature);
+know is_critical = celsius.value > CRITICAL_THRESHOLD;
+```
+
+### 5.2 Basic Syntax
+
+AERO syntax is built from first principles to serve its philosophy — clarity, precision, and explicit knowledge flow:
 
 ```aero
 // Define a real-world entity
@@ -143,7 +170,7 @@ fn normalise(reading: Temperature) -> Temperature ! [log] {
 }
 ```
 
-### 5.2 Effect System
+### 5.3 Effect System
 
 Effects are declared in function signatures using the `!` operator followed by a set literal:
 
@@ -153,7 +180,7 @@ fn fetch_user(id: UserId) -> Result<User, ApiError> ! [http, log, metrics] { ...
 
 Callers of `fetch_user` must themselves declare `http`, `log`, and `metrics` in their effect sets, or explicitly handle each effect at a boundary. Effect boundaries are the primary mechanism for structuring side-effects in AERO programs.
 
-### 5.3 World Bindings
+### 5.4 World Bindings
 
 Programs bind to real-world state through **world bindings**:
 
@@ -162,14 +189,14 @@ use world TemperatureSensor as sensor;
 
 fn main() ! [sensor, log] {
     loop {
-        let reading = sensor.observe();
-        let normalised = normalise(reading);
+        know reading    = sensor.observe();
+        know normalised = normalise(reading);
         emit log::metric("temperature.celsius", normalised.value);
     }
 }
 ```
 
-### 5.4 Resilience Constructs
+### 5.5 Resilience Constructs
 
 AERO provides three built-in resilience primitives:
 
@@ -181,7 +208,7 @@ AERO provides three built-in resilience primitives:
 
 These compose cleanly with the effect system and are tracked in type signatures.
 
-### 5.5 Module System
+### 5.6 Module System
 
 AERO organises code into **packages** (versioned, deployable units) and **modules** (namespaced compilation units within a package). Dependencies are declared in a `Aero.toml` manifest:
 

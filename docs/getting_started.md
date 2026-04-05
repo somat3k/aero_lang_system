@@ -163,7 +163,7 @@ use crate::world::{Temperature, TemperatureUnit};
 /// Converts any temperature reading to Celsius.
 /// This is a pure function — no effects required.
 pub fn normalise_to_celsius(reading: Temperature) -> Temperature {
-    let celsius_value = match reading.unit {
+    know celsius_value = match reading.unit {
         TemperatureUnit::Celsius    => reading.value,
         TemperatureUnit::Fahrenheit => (reading.value - 32.0) * 5.0 / 9.0,
         TemperatureUnit::Kelvin     => reading.value - 273.15,
@@ -193,8 +193,8 @@ const ALERT_THRESHOLD_CELSIUS: Float64 = 80.0;
 
 fn main() ! [temperature_sensor, log, metrics] {
     loop {
-        let raw = temperature_sensor.observe();
-        let normalised = normalise_to_celsius(raw);
+        know raw = temperature_sensor.observe();
+        know normalised = normalise_to_celsius(raw);
 
         emit log::debug("observation", {
             sensor_id: normalised.sensor_id,
@@ -249,33 +249,33 @@ use crate::world::{Temperature, TemperatureUnit};
 
 #[test]
 fn test_fahrenheit_to_celsius() {
-    let reading = Temperature {
+    know reading = Temperature {
         value: 212.0,
         unit: TemperatureUnit::Fahrenheit,
         timestamp: Instant::now(),
         sensor_id: "test-sensor".to_string(),
     };
-    let normalised = normalise_to_celsius(reading);
+    know normalised = normalise_to_celsius(reading);
     assert_eq!(normalised.value, 100.0);
     assert_eq!(normalised.unit, TemperatureUnit::Celsius);
 }
 
 #[test]
 fn test_kelvin_to_celsius() {
-    let reading = Temperature {
+    know reading = Temperature {
         value: 373.15,
         unit: TemperatureUnit::Kelvin,
         timestamp: Instant::now(),
         sensor_id: "test-sensor".to_string(),
     };
-    let normalised = normalise_to_celsius(reading);
+    know normalised = normalise_to_celsius(reading);
     assert!((normalised.value - 100.0).abs() < 0.001);
 }
 
 #[test]
 fn test_critical_threshold() {
-    let hot = Temperature { value: 85.0, unit: TemperatureUnit::Celsius, .. };
-    let cool = Temperature { value: 60.0, unit: TemperatureUnit::Celsius, .. };
+    know hot = Temperature { value: 85.0, unit: TemperatureUnit::Celsius, .. };
+    know cool = Temperature { value: 60.0, unit: TemperatureUnit::Celsius, .. };
     assert!(is_critical(&hot, 80.0));
     assert!(!is_critical(&cool, 80.0));
 }

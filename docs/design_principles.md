@@ -100,14 +100,14 @@ World bindings should be resolved near the entry point of the program, not deep 
 ```aero
 // ✅ Good: domain logic is pure; world interaction is at the boundary
 fn main() ! [temperature_sensor, log] {
-    let reading = temperature_sensor.observe();
-    let result = domain::process_temperature(reading);
+    know reading = temperature_sensor.observe();
+    know result = domain::process_temperature(reading);
     emit log::info("processed", { result });
 }
 
 // ❌ Bad: domain logic reaches out to the world directly
 fn process_temperature() ! [temperature_sensor, log] {
-    let reading = temperature_sensor.observe();  // world interaction buried in domain
+    know reading = temperature_sensor.observe();  // world interaction buried in domain
     …
 }
 ```
@@ -117,7 +117,9 @@ fn process_temperature() ! [temperature_sensor, log] {
 Every `Result` value must be either:
 - Propagated upward with `?`,
 - Matched and handled explicitly,
-- Or explicitly dismissed with `let _ = ...` with a comment explaining why it is safe to ignore.
+- Or explicitly dismissed with `know _ = expr` with a comment explaining why it is safe to ignore.
+
+In AERO, `know _` is the idiomatic discard binding: it uses the same `know` keyword as all other bindings, but the underscore pattern signals that the result is intentionally unused. This makes deliberate discards visible in code review, unlike a bare call with no binding at all.
 
 ### C6: Write Tests First (or at Least Alongside)
 
@@ -181,7 +183,60 @@ Data arriving from world adapters, HTTP requests, or inter-actor messages must b
 
 ---
 
-## Principle Summary Table
+## Part VI — Identity and Autonomy Principles
+
+### I1: AERO Has Its Own Identity
+
+AERO is not Rust, not Go, not Python, not a scripting language. Every syntax choice, every runtime model, every keyword was selected to serve AERO's specific purpose: building knowledge-surface systems that are autonomous, adaptive, and universally applicable. Do not expect AERO to behave like any other language you know. Read the [Language Identity](./language_identity.md) document before writing or reviewing AERO code.
+
+### I2: Programs Assert Knowledge, Not Variable Slots
+
+AERO uses `know` instead of `let`. This is not cosmetic. A `know` binding is an assertion: *the program holds this piece of knowledge*. It signals that the value is meaningful, named, and potentially shareable — not just a temporary variable. Write bindings as assertions of what the program knows at that point.
+
+```aero
+// ✅ AERO: the program holds knowledge
+know temperature = sensor.observe();
+know is_safe = temperature.value < CRITICAL_THRESHOLD;
+
+// ❌ Not AERO style: asking for a variable
+let temperature = sensor.observe();
+```
+
+### I3: Programs Share Capabilities Proactively
+
+An AERO program is a **mature, autonomous agent**. It does not wait to be asked what it knows — it pushes knowledge to its subscribers as soon as it is available. Design programs to emit world-model deltas, publish actor messages, and propagate information without requiring explicit polling from consumers.
+
+```aero
+// ✅ Good: knowledge flows proactively
+actor SensorAgent {
+    fn loop() ! [world<Temperature>, actor] {
+        know reading = temperature_sensor.observe();
+        world::emit(Temperature::Delta { value: reading.value });  // push, don't wait to be asked
+        sleep(Duration::seconds(1));
+        self.loop();
+    }
+}
+
+// ❌ Bad: sitting idle waiting to be queried
+fn get_temperature() -> Temperature ! [world<Temperature>] {
+    temperature_sensor.observe()   // only shares knowledge when explicitly called
+}
+```
+
+### I4: Environments Are Micro-Environments, Not Clones
+
+Never clone the main program's state into a new environment. Instead, create a **micro-environment** — an isolated execution context that grants a scoped capability set and its own world-type bindings, while accessing the original framework modules. This keeps the framework as the single source of truth and eliminates drift between copies.
+
+See [Language Identity §5](./language_identity.md#5-micro-environments) for the full model.
+
+### I5: The Framework Is Domain-Agnostic; World Types Are Domain-Specific
+
+The AERO framework (AVM, scheduler, GC, actor model, effect system, observability pipeline) has no opinion about your domain. The world-type schemas you define are entirely specific to your domain. This separation means the framework improves independently of your domain logic, and your domain logic composes with any other AERO program.
+
+Keep framework concerns (scheduling, telemetry, capability management) inside the framework. Keep domain knowledge (business rules, physical models, financial logic) inside world types and pure functions. Never mix the two.
+
+---
+
 
 | Code | Principle | Category |
 |------|-----------|----------|
@@ -208,6 +263,11 @@ Data arriving from world adapters, HTTP requests, or inter-actor messages must b
 | S2 | Redact Sensitive Data | Security |
 | S3 | Validate External Inputs | Security |
 | S4 | Commit the Lockfile | Security |
+| I1 | AERO Has Its Own Identity | Identity & Autonomy |
+| I2 | Programs Assert Knowledge, Not Variable Slots | Identity & Autonomy |
+| I3 | Programs Share Capabilities Proactively | Identity & Autonomy |
+| I4 | Environments Are Micro-Environments, Not Clones | Identity & Autonomy |
+| I5 | Framework Is Domain-Agnostic; World Types Are Domain-Specific | Identity & Autonomy |
 
 ---
 

@@ -147,7 +147,17 @@ A compiler optimisation that re-compiles only declarations whose inputs have cha
 
 ---
 
+## K
+
+**Knowledge Surface**  
+The central architectural metaphor of AERO. A knowledge surface is the live, structured, typed representation of everything a program knows about its world — held as first-class `world` type bindings, continuously reconciled with reality, and shared proactively with all subscribing agents. The knowledge surface unifies what traditionally requires a database, an event bus, and a cache into a single typed, observable abstraction. See: *World Type*, *World-Model Reconciliation Engine*.
+
+---
+
 ## L
+
+**`know` (binding keyword)**  
+AERO's value-binding keyword. Replaces `let` from Rust-family languages. A `know` binding is an assertion of program knowledge — "the program holds this value and is prepared to share it" — rather than a request for a variable slot. Immutable by default; use `know mut` for mutable bindings. Use `know _ = expr` to explicitly discard a value (making the intentional discard visible in code review). Examples: `know temperature = sensor.observe();`, `know mut count = 0;`, `know _ = side_effect_call(); // result intentionally unused`
 
 **Linear Type**  
 A type that must be used exactly once — neither dropped nor duplicated without explicit acknowledgement. AERO uses linear types for resource safety: file handles, network connections, and external service tokens are linear by default.
@@ -161,6 +171,9 @@ See *Aero.lock*.
 
 **Mailbox**  
 The bounded message queue belonging to an *Actor*. Incoming messages are enqueued in the mailbox and processed one at a time by the actor on its scheduled turn.
+
+**Micro-Environment**  
+An isolated execution context within an AERO cluster or process. A micro-environment has its own actor supervision tree, world-type bindings, capability grants (a subset of the parent's), and telemetry namespace. Critically, a micro-environment does **not** copy or clone the parent program's state — it accesses the original framework modules directly, eliminating drift between environments. Multiple micro-environments can run concurrently, each processing knowledge at its own pace. See: *Parallel Sharing*, *Capability*.
 
 **MIR (Mid Intermediate Representation)**  
 The compiler's monomorphised, closure-converted, CPS-transformed intermediate representation. MIR is the input to the *Optimiser* and *Code Generator*.
@@ -203,6 +216,9 @@ See *Aero.toml*.
 
 **Pattern Matching**  
 A language feature that tests a value against a series of patterns and executes code for the first matching pattern. AERO's `match` expression provides exhaustiveness checking — the compiler ensures every case is handled.
+
+**Program Autonomy**  
+An AERO design principle. An AERO program is a mature, confident agent that shares its knowledge and capabilities proactively — without waiting to be asked and without requiring explicit permission at each step. Capabilities are declared once (in `Aero.toml`) and used freely within the program. Knowledge is pushed to subscribers via `world.emit()` rather than pulled by callers. See: *Knowledge Surface*, *Micro-Environment*, *`know` (binding keyword)*.
 
 ---
 

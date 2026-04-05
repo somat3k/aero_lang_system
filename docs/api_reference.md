@@ -147,9 +147,9 @@ A hash map from keys of type `K` to values of type `V`.
 A point in time with nanosecond resolution (UTC).
 
 ```aero
-let now = Instant::now();
-let later = now + Duration::seconds(10);
-let elapsed: Duration = later - now;
+know now = Instant::now();
+know later = now + Duration::seconds(10);
+know elapsed: Duration = later - now;
 ```
 
 ---
@@ -212,7 +212,7 @@ fn f() -> () ! [log] {  // must include 'log' because g() requires it
 Effects can be handled at explicit boundaries using `handle`:
 
 ```aero
-let result = handle log with TestLogSink::new() {
+know result = handle log with TestLogSink::new() {
     my_function_that_logs()
 };
 ```
@@ -329,7 +329,7 @@ For raw TCP/UDP, use `std::net::TcpStream`, `std::net::UdpSocket`.
 Retry `expr` up to `N` times with exponential back-off (base: 100ms, max: 30s, jitter: ±10%).
 
 ```aero
-let result = retry<3>(database.query("SELECT …")) ! [db, time];
+know result = retry<3>(database.query("SELECT …")) ! [db, time];
 // Type: Result<QueryResult, RetryExhausted<DbError>>
 ```
 
@@ -338,7 +338,7 @@ let result = retry<3>(database.query("SELECT …")) ! [db, time];
 Execute `expr` through a circuit breaker. If the circuit trips (error rate > 50% over 10 requests), returns `fallback` instead of calling `expr`.
 
 ```aero
-let price = circuit(
+know price = circuit(
     pricing_service.get_price(sku),
     fallback: Price::cached(sku),
 ) ! [http, log];
@@ -349,7 +349,7 @@ let price = circuit(
 Execute `expr`, returning `Err(Timeout)` if it does not complete within duration `D`.
 
 ```aero
-let result = timeout<Duration::milliseconds(500)>(
+know result = timeout<Duration::milliseconds(500)>(
     external_api.fetch(request)
 ) ! [http];
 // Type: Result<ApiResponse, Timeout | ApiError>
@@ -364,7 +364,7 @@ let result = timeout<Duration::milliseconds(500)>(
 Spawn a new actor running function `f`. Returns an `ActorRef<T>` where `T` is the message type `f` accepts.
 
 ```aero
-let worker: ActorRef<WorkItem> = spawn(worker_loop) ! [actor];
+know worker: ActorRef<WorkItem> = spawn(worker_loop) ! [actor];
 ```
 
 ### `send(ref, msg)`
@@ -380,7 +380,7 @@ send(worker, WorkItem { data: payload }) ! [actor];
 Receive the next message from the current actor's mailbox. Suspends until a message is available.
 
 ```aero
-let msg: MyMessage = recv() ! [actor];
+know msg: MyMessage = recv() ! [actor];
 ```
 
 ### `link(ref)`
@@ -396,7 +396,7 @@ link(worker) ! [actor];
 Monitor `ref`. Receive a `Down` message if `ref` terminates (without linking fate).
 
 ```aero
-let monitor_ref = monitor(worker) ! [actor];
+know monitor_ref = monitor(worker) ! [actor];
 ```
 
 ---
@@ -432,11 +432,11 @@ emit log::histogram("http.latency_ms", elapsed.as_millis(), { route: "/api/v1/us
 
 ```aero
 // Manual span (usually automatic at actor boundaries)
-let span = trace::span("database.query") ! [trace];
+know span = trace::span("database.query") ! [trace];
 defer span.end();
 
 emit trace::event("query.start", { sql: query }) ! [trace];
-let result = database.execute(query) ! [db];
+know result = database.execute(query) ! [db];
 emit trace::event("query.end", { rows: result.len() }) ! [trace];
 ```
 
@@ -470,11 +470,11 @@ use aero_test::*;
 
 #[test]
 fn test_with_mock_world() {
-    let mock = mock_world::<Temperature>();
+    know mock = mock_world::<Temperature>();
     mock.enqueue(Temperature { value: 100.0, unit: Celsius, … });
     mock.enqueue(Temperature { value: 200.0, unit: Celsius, … });
 
-    let telemetry = capture_telemetry();
+    know telemetry = capture_telemetry();
 
     handle world<Temperature> with mock,
           log with telemetry {
