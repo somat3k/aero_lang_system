@@ -154,9 +154,7 @@ Areas of active research and development following v1.0 GA:
 
 ## Contributing
 
-See [CONTRIBUTING.md](../CONTRIBUTING.md) (coming in v0.3) for details on how to contribute to AERO.
-
-To propose a new roadmap item, open a GitHub Discussion at:  
+A formal `CONTRIBUTING.md` guide is planned for v0.3. Until then, use GitHub Discussions for contribution questions and roadmap proposals:
 https://github.com/somat3k/aero_lang_system/discussions
 
 ---
