@@ -277,7 +277,7 @@ The `emit log::metric(name, value)` form produces an OpenTelemetry-compatible me
 
 ### 7.3 Distributed Tracing
 
-Every cross-actor message carry propagates a **Trace Context** (W3C TraceContext standard) automatically. Spans are opened and closed by the runtime at actor boundaries, and enriched with effect annotations.
+Every cross-actor message automatically carries a **Trace Context** (W3C TraceContext standard). Spans are opened and closed by the runtime at actor boundaries, and enriched with effect annotations.
 
 ### 7.4 Health Model
 
