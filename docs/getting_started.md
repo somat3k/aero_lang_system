@@ -274,8 +274,18 @@ fn test_kelvin_to_celsius() {
 
 #[test]
 fn test_critical_threshold() {
-    know hot = Temperature { value: 85.0, unit: TemperatureUnit::Celsius, .. };
-    know cool = Temperature { value: 60.0, unit: TemperatureUnit::Celsius, .. };
+    know hot = Temperature {
+        value: 85.0,
+        unit: TemperatureUnit::Celsius,
+        timestamp: Instant::now(),
+        sensor_id: "test-sensor".to_string(),
+    };
+    know cool = Temperature {
+        value: 60.0,
+        unit: TemperatureUnit::Celsius,
+        timestamp: Instant::now(),
+        sensor_id: "test-sensor".to_string(),
+    };
     assert!(is_critical(&hot, 80.0));
     assert!(!is_critical(&cool, 80.0));
 }
