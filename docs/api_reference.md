@@ -419,13 +419,13 @@ emit log::error("message", { key: value, … });   // requires: log
 
 ```aero
 // Counter (monotonically increasing)
-emit log::count("http.requests", 1, { method: "GET", status: 200 });
+emit metrics::count("http.requests", 1, { method: "GET", status: 200 });
 
 // Gauge (current value)
-emit log::gauge("queue.depth", queue.len(), { queue: "orders" });
+emit metrics::gauge("queue.depth", queue.len(), { queue: "orders" });
 
 // Histogram (distribution of values)
-emit log::histogram("http.latency_ms", elapsed.as_millis(), { route: "/api/v1/users" });
+emit metrics::histogram("http.latency_ms", elapsed.as_millis(), { route: "/api/v1/users" });
 ```
 
 ### Distributed Traces
