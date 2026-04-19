@@ -91,10 +91,10 @@ eBPF programs are compiled from a high-level **AERO Data Plane DSL** (a subset o
 // AERO Data Plane DSL example — simple L3 forwarder
 #[xdp]
 fn forward(ctx: XdpContext) -> XdpAction {
-    let eth = ctx.parse::<EtherHeader>()?;
-    let ip  = ctx.parse::<Ipv4Header>()?;
+    know eth = ctx.parse(EtherHeader)?;
+    know ip  = ctx.parse(Ipv4Header)?;
 
-    let next_hop = fib_lookup(ip.dst_addr)?;
+    know next_hop = fib_lookup(ip.dst_addr)?;
 
     ctx.rewrite_eth_dst(next_hop.mac);
     ctx.rewrite_eth_src(local_mac());

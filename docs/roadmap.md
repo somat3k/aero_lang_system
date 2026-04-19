@@ -61,7 +61,7 @@ Every milestone below advances that vision by making AERO more expressive, more 
 | L-06 | Pattern matching | `match` expressions with exhaustiveness checking |
 | L-07 | Module system | `use`, `pub`, `mod`, package-level imports |
 | L-08 | Capability declarations | `[capabilities]` in `Aero.toml`, capability tokens |
-| L-09 | Telemetry API | `emit log::*`, `emit log::metric`, auto span injection |
+| L-09 | Telemetry API | `emit log::*`, `emit metrics::gauge/count/histogram`, auto span injection |
 | L-10 | Improved stdlib | `std::time`, `std::net` (TCP/UDP), `std::fs` |
 
 **Definition of Done:** The temperature monitor example from the Getting Started guide compiles and runs correctly with a mock adapter.

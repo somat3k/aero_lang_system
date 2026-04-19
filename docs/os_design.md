@@ -100,18 +100,30 @@ AeroOS exposes **28 syscalls** (compared to Linux's ~400). Every syscall takes a
 |---------|-----------|-------------|
 | `cap_create` | `(parent_cap, rights_mask)` | Derive a child capability |
 | `cap_revoke` | `(cap)` | Revoke a capability and all its children |
+| `cap_inspect` | `(cap)` | Read a capability's rights and type |
 | `mem_alloc` | `(mem_cap, size, flags)` | Allocate physical pages |
 | `mem_map` | `(mem_cap, vaddr, paddr, flags)` | Map pages into address space |
+| `mem_protect` | `(mem_cap, vaddr, size, flags)` | Change page protection flags |
 | `mem_free` | `(mem_cap, paddr, size)` | Release physical pages |
 | `proc_create` | `(proc_cap, image, caps[])` | Create a new process with a set of capabilities |
 | `proc_exit` | `(exit_code)` | Terminate current process |
+| `proc_wait` | `(proc_cap)` | Wait for a child process to exit |
+| `chan_create` | `(proc_cap, type)` | Create a typed IPC channel |
+| `chan_close` | `(chan_cap)` | Close and invalidate an IPC channel |
 | `ipc_send` | `(chan_cap, msg_ptr, msg_len)` | Send typed IPC message |
 | `ipc_recv` | `(chan_cap, buf_ptr, buf_len)` | Receive IPC message (blocking) |
 | `ipc_call` | `(chan_cap, msg_ptr, msg_len, reply_buf)` | Send + receive (synchronous RPC) |
 | `irq_claim` | `(irq_cap, irq_num)` | Claim an interrupt line |
 | `irq_wait` | `(irq_cap)` | Block until interrupt fires |
+| `dev_claim` | `(dev_cap, device_id)` | Claim ownership of a hardware device |
 | `sched_yield` | `()` | Voluntarily yield the CPU |
+| `sched_affinity` | `(proc_cap, cpu_mask)` | Pin a process to a CPU set |
+| `futex_wait` | `(mem_cap, addr, expected)` | Block until futex value changes |
+| `futex_wake` | `(mem_cap, addr, count)` | Wake blocked futex waiters |
+| `timer_create` | `(clock_cap, deadline, flags)` | Create a one-shot or periodic timer |
+| `timer_wait` | `(timer_cap)` | Block until timer fires |
 | `clock_get` | `(clock_cap)` | Read monotonic / wall clock |
+| `entropy` | `(entropy_cap, buf_ptr, buf_len)` | Read cryptographically secure random bytes |
 | `debug_log` | `(log_cap, msg_ptr, msg_len)` | Emit kernel log event |
 | `attest` | `(tpm_cap, nonce)` | Request TPM attestation quote |
 

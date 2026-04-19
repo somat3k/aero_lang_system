@@ -309,7 +309,7 @@ Program                  AVM Runtime               Export Backends
   │                          │
   ├── emit log::info(…)  ──► Log Buffer (ring) ──► OTLP Collector
   │                          │                        │
-  ├── emit log::metric(…) ─► Metric Aggregator ───► Prometheus
+  ├── emit metrics::gauge/count/histogram(…) ─► Metric Aggregator ───► Prometheus
   │                          │                        │
   ├── (actor message)    ──► Trace Context Prop. ──► OTLP Collector
   │                          │

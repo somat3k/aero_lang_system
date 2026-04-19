@@ -31,7 +31,7 @@ This installs the AERO toolchain into `~/.aero/bin/` and adds it to your `PATH`.
 Download the latest release package from the [AERO releases page](https://github.com/somat3k/aero_lang_system/releases) and extract it:
 
 ```bash
-tar -xzf aero-toolchain-v1.0.0-linux-x86_64.tar.gz
+tar -xzf aero-toolchain-v0.1.0-linux-x86_64.tar.gz
 export PATH="$PWD/aero-toolchain/bin:$PATH"
 ```
 
@@ -40,11 +40,11 @@ export PATH="$PWD/aero-toolchain/bin:$PATH"
 ```bash
 aeroc --version
 # Expected output:
-# aeroc 1.0.0 (stable, 2026-04-04)
+# aeroc 0.1.0 (nightly, 2026-04-04)
 
 avm --version
 # Expected output:
-# avm 1.0.0
+# avm 0.1.0
 ```
 
 ---
@@ -201,7 +201,7 @@ fn main() ! [temperature_sensor, log, metrics] {
             value_celsius: normalised.value,
         });
 
-        emit log::metric("temperature.celsius", normalised.value, {
+        emit metrics::gauge("temperature.celsius", normalised.value, {
             sensor: normalised.sensor_id,
         });
 

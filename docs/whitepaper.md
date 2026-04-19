@@ -187,11 +187,11 @@ Programs bind to real-world state through **world bindings**:
 ```aero
 use world TemperatureSensor as sensor;
 
-fn main() ! [sensor, log] {
+fn main() ! [sensor, log, metrics] {
     loop {
         know reading    = sensor.observe();
         know normalised = normalise(reading);
-        emit log::metric("temperature.celsius", normalised.value);
+        emit metrics::gauge("temperature.celsius", normalised.value, {});
     }
 }
 ```
@@ -273,7 +273,7 @@ Every `emit log::*` statement produces a structured JSON event with:
 
 ### 7.2 Metrics
 
-The `emit log::metric(name, value)` form produces an OpenTelemetry-compatible metric event. Aggregation (histograms, counters, gauges) is specified at the export boundary, not the emit site.
+Use `emit metrics::gauge`, `emit metrics::count`, or `emit metrics::histogram` to produce OpenTelemetry-compatible metric events. Aggregation boundaries (roll-up windows, export intervals) are configured at the telemetry pipeline level, not the emit site.
 
 ### 7.3 Distributed Tracing
 
