@@ -14,6 +14,7 @@ All project documentation lives in the [`docs/`](./docs/) folder:
 |----------|-------------|
 | [📄 Whitepaper](./docs/whitepaper.md) | Enterprise academic whitepaper — vision, theory, formal specification |
 | [🧬 Language Identity](./docs/language_identity.md) | AERO's distinct syntax, `know` keyword, knowledge-surface model, autonomy, micro-environments |
+| [🔮 HoloLang](./docs/hololang.md) | Domain bridge DSL for holographic / physical-device systems: DDAC, GEMM, SafeTensor, MDI canvas |
 | [🖥 Systems Stack](./docs/systems_stack.md) | Full-stack blueprint: hardware → OS → network → runtime → application |
 | [⚙️ OS Design](./docs/os_design.md) | AeroOS — programming-oriented, capability-based operating system |
 | [🌐 Network Architecture](./docs/network_architecture.md) | Lean, programmable network layer: data / control / management planes |
@@ -24,7 +25,7 @@ All project documentation lives in the [`docs/`](./docs/) folder:
 | [🗺 Roadmap](./docs/roadmap.md) | Phased development plan, milestones, and delivery schedule |
 | [📖 Glossary](./docs/glossary.md) | Terminology, acronyms, and concept definitions |
 
-Start with the **[Whitepaper](./docs/whitepaper.md)** for the full vision, then **[Language Identity](./docs/language_identity.md)** to understand AERO's distinct philosophy and syntax before writing any code.
+Start with the **[Whitepaper](./docs/whitepaper.md)** for the full vision, then **[Language Identity](./docs/language_identity.md)** to understand AERO's distinct philosophy. For physical device / holographic systems, read **[HoloLang](./docs/hololang.md)**.
 
 ---
 

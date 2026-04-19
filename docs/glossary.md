@@ -80,8 +80,14 @@ A specification of the guarantees that a *World Type*'s *World Adapter* makes ab
 **Data Classification**  
 The practice of annotating data values with their sensitivity category (e.g., `@sensitive(PII)`) so that the compiler and runtime can enforce access control, redaction, and audit requirements.
 
+**DDAC (Discovery-Dynamics-Adaptable Computation)**  
+HoloLang's core computation model for physical device systems. DDAC operates in three phases: ① **Discover** — probe sensors and characterise the environment to build an initial computational profile; ② **Dynamics** — continuously observe environmental drift and track computation graph performance; ③ **Adapt** — recompile the hot path in a shadow micro-environment and hot-swap the execution plan when the new plan is validated. DDAC ensures that computation graphs transition smoothly when conditions change — no restarts, no abrupt mode switches. See: *HoloLang*, *Micro-Environment*.
+
 **Dependent Type**  
 A type whose definition depends on a value. AERO's type system extends Hindley-Milner with dependent types to allow types to express invariants about values (e.g., a non-empty list, an integer in range 0–100).
+
+**DocDirectory**  
+A structured documentation artefact generated automatically from a HoloLang session's declarations. Contains Markdown and JSON descriptions of every device, computation graph, channel, skill, and enumeration in the session. Declared with the `doc_directory { … }` block. See: *HoloLang*, *Session (HoloLang)*.
 
 **DriftSeverity**  
 An enum emitted by the *Reconciliation Engine* classifying how significantly the observed world state has diverged from the last-known state: `Minor`, `Major`, or `Critical`.
@@ -122,6 +128,9 @@ A runtime boolean value that controls whether a particular feature or code path 
 
 ## G
 
+**GEMM (General Matrix Multiplication)**  
+The mathematical kernel underlying HoloLang's computation graph acceleration. All `matmul`, `conv2d`, and linear-algebra-heavy operations in a HoloLang graph are automatically lowered to GEMM kernel descriptors and dispatched to the best available accelerator (GPU via cuBLAS/ROCm, CPU via AVX-512 OpenBLAS, or ARM NEON). A calibration pass at session startup benchmarks available accelerators and builds a DDAC-guided dispatch table. See: *HoloLang*, *DDAC*, *SafeTensor*.
+
 **Garbage Collector (GC)**  
 The AVM subsystem responsible for automatically reclaiming memory no longer reachable by the program. AERO uses a tri-colour, incremental, generational GC. *Linear types* allow deterministic deallocation of resources outside GC involvement.
 
@@ -131,6 +140,9 @@ A lightweight user-space thread managed by the *Scheduler*, not the OS. AERO pro
 ---
 
 ## H
+
+**HoloLang**  
+A domain-specific language that bridges to AERO for holographic projection and physical device orchestration systems. HoloLang source files (`.hl`) are compiled to AERO bytecode by `aeroc --domain holographic`. HoloLang adds: device declarations (type-safe hardware descriptors), *SafeTensor* (compile-time shape-checked tensors), computation graphs (GEMM-accelerated pipelines), *MDI Canvas* (spatial mesh projection model), *DDAC* (Discovery-Dynamics-Adaptable Computation), multi-channel communication (gRPC, WebSocket, webhook, REST), session lifecycle, skill tracking, and *DocDirectory* generation. All HoloLang constructs expand to well-typed AERO actors, world types, and effect-tracked functions — there is no additional runtime layer. See: [HoloLang Specification](./hololang.md).
 
 **Hindley-Milner**  
 A classical type inference algorithm that infers the types of expressions without requiring explicit annotations. AERO uses an extended Hindley-Milner algorithm as the foundation of its type inference engine.
@@ -171,6 +183,9 @@ See *Aero.lock*.
 
 **Mailbox**  
 The bounded message queue belonging to an *Actor*. Incoming messages are enqueued in the mailbox and processed one at a time by the actor on its scheduled turn.
+
+**MDI Canvas (Multi-Domain Interface Canvas)**  
+HoloLang's spatial model for projection systems. An MDI canvas divides the projection space into a mesh of independently addressable tiles, each capable of carrying its own *impulse cycle*. Declared with `canvas { mesh: [R, C], tile_size: [W, H], frame_rate: N }`. Tiles are addressed as `[row, col]` and support individual, row, column, or rectangular-region operations. See: *HoloLang*, *Impulse Cycle*.
 
 **Micro-Environment**  
 An isolated execution context within an AERO cluster or process. A micro-environment has its own actor supervision tree, world-type bindings, capability grants (a subset of the parent's), and telemetry namespace. Critically, a micro-environment does **not** copy or clone the parent program's state — it accesses the original framework modules directly, eliminating drift between environments. Multiple micro-environments can run concurrently, each processing knowledge at its own pace. See: *Parallel Sharing*, *Capability*.
@@ -237,11 +252,20 @@ A resilience primitive that re-executes a fallible expression up to a specified 
 
 ## S
 
+**SafeTensor\<T, Shape\>**  
+HoloLang's primary tensor type. The `Shape` parameter is part of the type — shape mismatches between operations (e.g., adding tensors of incompatible sizes, multiplying matrices with incompatible dimensions) are **compile-time errors**, not runtime panics. Supports GEMM-lowered operations (`matmul`, `conv2d`) and vectorised operations (`relu`, `normalize`, element-wise arithmetic). Zero-copy views for transpose and reshape. See: *HoloLang*, *GEMM*.
+
 **Scheduler**  
 The AVM subsystem responsible for multiplexing green threads (actors) onto OS threads. AERO uses a work-stealing, M:N cooperative scheduler.
 
 **Semantic Versioning (SemVer)**  
 A versioning scheme where version numbers encode the nature of changes: `MAJOR.MINOR.PATCH`. AERO packages follow SemVer; the AERO language and standard library commit to SemVer stability guarantees from v1.0 onward.
+
+**Session (HoloLang)**  
+The top-level execution scope in a HoloLang program. A session owns all devices, canvases, channels, and skills declared within it and compiles to an AERO actor supervision tree. Sessions support graceful teardown (devices driven to safe states before termination) and DDAC-guided adaptation throughout their lifetime. Declared with `@session("name")`. See: *HoloLang*, *DDAC*, *Skill*.
+
+**Skill (HoloLang)**  
+A named, versioned capability declared in a HoloLang session's `skills { … }` block. Skills are resolved against the AERO framework before session startup — incompatible skills produce structured `SkillResolutionError` values, not runtime crashes. Skill compatibility is checked against version (SemVer), effect requirements, and device type requirements. See: *HoloLang*, *Capability*.
 
 **Supervision Tree**  
 A hierarchy of *Actors* where parent actors (supervisors) govern the restart policies of their children. When a child actor crashes, the supervisor decides whether to restart it, stop it, or escalate the failure. Declared using the `supervisor` keyword.

@@ -26,7 +26,8 @@ AERO is not Rust. It is not Go. It is not a scripting language with types bolted
 5. [Micro-Environments](#5-micro-environments)
 6. [Universal Domain Adaptability](#6-universal-domain-adaptability)
 7. [Parallel Sharing with Isolation](#7-parallel-sharing-with-isolation)
-8. [Language Identity Quick Reference](#8-language-identity-quick-reference)
+8. [HoloLang — The Physical-Systems Bridge](#8-hololang--the-physical-systems-bridge)
+9. [Language Identity Quick Reference](#9-language-identity-quick-reference)
 
 ---
 
@@ -395,10 +396,30 @@ Neither Trader A nor Trader B blocks the other. Neither can access the other's s
 
 ---
 
-## 8. Language Identity Quick Reference
+## 8. HoloLang — The Physical-Systems Bridge
 
-| Concept | AERO Choice | Rationale |
-|---------|------------|-----------|
+AERO's knowledge-surface model is domain-agnostic: the same AVM, scheduler, and effect system can serve finance, healthcare, or IoT equally well. For physical device systems — holographic projectors, laser arrays, galvo-mirror rigs, multi-sensor fusion platforms — AERO provides a domain bridge called **HoloLang**.
+
+HoloLang is a higher-level DSL that compiles to AERO bytecode. It adds:
+
+- **Device declarations** — typed hardware descriptors with bounds encoded at the type level (out-of-bounds commands are compile-time errors)
+- **SafeTensor** — compile-time shape-checked tensor types for beam data and sensor readings
+- **Computation graphs** — explicit, statically-typed pipelines lowered to GEMM-accelerated kernels
+- **MDI canvas** — a spatial mesh model for multi-tile holographic projection
+- **DDAC** (Discovery-Dynamics-Adaptable Computation) — an adaptation loop that smoothly transitions the computation plan as environmental conditions change
+- **Multi-channel communication** — gRPC, WebSocket, webhook, and REST channels backed by AERO actors
+- **Session lifecycle** — scoped execution with skill tracking, DocDirectory generation, and graceful device teardown
+
+HoloLang is not a separate runtime. Every HoloLang construct expands to well-typed AERO code before the AERO compiler sees it. There is no additional VM layer, no reflection, and no runtime type dispatch on the critical projection path — all operator resolution is pre-compiled and contextually validated at the HoloLang compilation stage.
+
+See the **[HoloLang Specification](./hololang.md)** for the full language reference.
+
+---
+
+## 9. Language Identity Quick Reference
+
+| Concept | AERO / HoloLang Choice | Rationale |
+|---------|----------------------|-----------|
 | Value binding keyword | `know` | Programs assert knowledge, not request variable slots |
 | Mutable binding | `know mut` | Mutability is a declared capability, not a default escape hatch |
 | Function definition | `fn` | Mathematical mapping notation |
@@ -409,6 +430,7 @@ Neither Trader A nor Trader B blocks the other. Neither can access the other's s
 | Isolation model | Micro-environments | Isolated contexts, shared original framework |
 | Knowledge model | World types + reconciliation | Typed, versioned, always-fresh world knowledge |
 | Capability model | Declared in `Aero.toml`, granted at startup | Least privilege, no ambient authority |
+| Physical systems | HoloLang DSL → AERO bytecode | Device safety, GEMM acceleration, DDAC adaptation |
 
 ---
 

@@ -9,16 +9,17 @@
 | # | Document | Description |
 |---|----------|-------------|
 | 1 | [Whitepaper](./whitepaper.md) | Enterprise academic whitepaper — vision, theory, and formal specification |
-| 2 | [Language Identity](./language_identity.md) | AERO's distinct syntax, knowledge-surface model, autonomy, and micro-environments |
-| 3 | [Systems Stack](./systems_stack.md) | Full-stack blueprint: hardware → OS → network → runtime → application |
-| 4 | [OS Design](./os_design.md) | AeroOS — programming-oriented, capability-based operating system |
-| 5 | [Network Architecture](./network_architecture.md) | Lean, programmable network layer: data / control / management planes |
-| 6 | [Architecture](./architecture.md) | AERO runtime architecture, component model, and data-flow diagrams |
-| 7 | [Design Principles](./design_principles.md) | Core philosophy, language tenets, and coding conventions |
-| 8 | [Getting Started](./getting_started.md) | Installation, first program, and guided project walkthrough |
-| 9 | [API Reference](./api_reference.md) | Comprehensive language & runtime API reference |
-| 10 | [Roadmap](./roadmap.md) | Phased development plan, milestones, and delivery schedule |
-| 11 | [Glossary](./glossary.md) | Terminology, acronyms, and concept definitions |
+| 2 | [Language Identity](./language_identity.md) | AERO's distinct syntax, knowledge-surface model, autonomy, micro-environments, and HoloLang bridge |
+| 3 | [HoloLang](./hololang.md) | Domain bridge DSL for holographic / physical-device systems: DDAC, GEMM, SafeTensor, MDI canvas |
+| 4 | [Systems Stack](./systems_stack.md) | Full-stack blueprint: hardware → OS → network → runtime → application |
+| 5 | [OS Design](./os_design.md) | AeroOS — programming-oriented, capability-based operating system |
+| 6 | [Network Architecture](./network_architecture.md) | Lean, programmable network layer: data / control / management planes |
+| 7 | [Architecture](./architecture.md) | AERO runtime architecture, component model, and data-flow diagrams |
+| 8 | [Design Principles](./design_principles.md) | Core philosophy, language tenets, and coding conventions |
+| 9 | [Getting Started](./getting_started.md) | Installation, first program, and guided project walkthrough |
+| 10 | [API Reference](./api_reference.md) | Comprehensive language & runtime API reference |
+| 11 | [Roadmap](./roadmap.md) | Phased development plan, milestones, and delivery schedule |
+| 12 | [Glossary](./glossary.md) | Terminology, acronyms, and concept definitions |
 
 ---
 
@@ -38,7 +39,7 @@ AERO is not just a language — it is a *living system specification*: every pro
 ## Reading Order
 
 ```
-Whitepaper → Language Identity → Systems Stack → OS Design → Network Architecture
+Whitepaper → Language Identity → HoloLang → Systems Stack → OS Design → Network Architecture
      ↓               ↓
  Architecture → Design Principles
      ↓
@@ -47,7 +48,7 @@ Getting Started → API Reference
    Roadmap → Glossary
 ```
 
-New contributors should start with the **Whitepaper** for the vision and motivation, then **Language Identity** to understand AERO's distinct syntax and philosophy (read this *before* writing any AERO code), then **Systems Stack** for the full hardware-to-application blueprint.
+New contributors should start with the **Whitepaper** for the vision, then **Language Identity** to understand AERO's distinct philosophy (read this *before* writing any AERO code). Developers working on physical device systems, holographic projection, or GEMM-accelerated pipelines should proceed directly to **HoloLang**.
 
 ---
 
