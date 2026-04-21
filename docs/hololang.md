@@ -529,6 +529,32 @@ Skills check:
 - **Effect compatibility** (skill's declared effects ⊆ session's granted capabilities),
 - **Device compatibility** (skill's required device types ⊆ session's declared devices).
 
+### Linear Pull Agent Sessions
+
+For Linear-driven delivery workflows, sessions can declare orchestrated agent requests using `@agent` blocks. This keeps `@`-addressed requests, instruction policy, and runtime enforcement in one place.
+
+```hololang
+linear_pull ProjectDelivery {
+    source: "linear://project/AERO-42"
+    mode:   "orchestrated"
+}
+
+@agent("warehouse_graveler")
+instructions {
+    intent: "transform-and-classify"
+    enforce: [
+        "require_skill:data_transform",
+        "require_skill:data_classification",
+        "deny_unmapped_targets",
+        "emit_metrics:latency,throughput,error_rate"
+    ]
+    transport: "grpc+proto"
+    topology:  "planes,lanes,controllers,shards"
+}
+```
+
+The compiler validates that every enforced statement maps to declared skills/capabilities before session startup. Invalid mappings fail fast with structured diagnostics.
+
 ---
 
 ## 12. DocDirectory Generation
