@@ -532,6 +532,7 @@ Skills check:
 ### Linear Pull Agent Sessions
 
 For Linear-driven delivery workflows, sessions can declare orchestrated agent requests using `@agent` blocks. This keeps `@`-addressed requests, instruction policy, and runtime enforcement in one place.
+`linear_pull` represents a project-synchronised session bootstrap: it binds a session to a Linear project feed and continuously materialises task updates into the active orchestration context.
 
 ```hololang
 linear_pull ProjectDelivery {
@@ -554,6 +555,9 @@ instructions {
 ```
 
 The compiler validates that every enforced statement maps to declared skills/capabilities before session startup. Invalid mappings fail fast with structured diagnostics.
+
+- `deny_unmapped_targets` blocks execution when an instruction references a data target (table, stream, shard, or channel) that has no declared mapping in the session.
+- `topology` declares the orchestration graph shape (`planes`, `lanes`, `controllers`, `shards`) used by runtime placement and metrics labels.
 
 ---
 
