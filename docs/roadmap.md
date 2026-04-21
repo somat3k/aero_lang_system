@@ -105,6 +105,7 @@ Every milestone below advances that vision by making AERO more expressive, more 
 | E-08 | Cluster protocol v1 | Multi-node AVM deployment, remote ActorRef |
 | E-09 | Data classification | `@sensitive` annotation, redaction enforcement |
 | E-10 | Documentation site | `docs.aero-lang.dev` — searchable, versioned |
+| E-11 | Agentic orchestrator | Rust CLI + service that turns Linear mentions into orchestrated sessions, shard placement, and policy enforcement |
 
 **Definition of Done:** An external contributor can publish a package to the registry and have it consumed by a third project using only public tooling.
 
@@ -140,6 +141,7 @@ Areas of active research and development following v1.0 GA:
 | **Distributed Transactions** | First-class two-phase commit and saga patterns for world emits |
 | **AERO on Bare Metal** | Embedded and RTOS targets for IoT and edge hardware |
 | **Gradual Adoption Path** | FFI and interop layers for calling AERO from Rust, Go, and Python |
+| **Warehouse Graveler** | Data transformer hub with GNN query routing, gRPC/Proto APIs, and typed knowledge surfaces for agents |
 
 ---
 
