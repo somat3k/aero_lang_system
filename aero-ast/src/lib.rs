@@ -260,7 +260,15 @@ pub fn format(program: &Program) -> String {
                 }
                 output.push_str("}\n\n");
             }
-            _ => {} // Other items
+            Item::Enum(_) => {
+                panic!("aero_ast::format does not support Item::Enum yet");
+            }
+            Item::World(_) => {
+                panic!("aero_ast::format does not support Item::World yet");
+            }
+            Item::Use(_) => {
+                panic!("aero_ast::format does not support Item::Use yet");
+            }
         }
     }
 
