@@ -1,0 +1,32 @@
+[package]
+name = "aeroc"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+description = "AERO language compiler and toolchain CLI"
+
+[[bin]]
+name = "aeroc"
+path = "src/main.rs"
+
+[dependencies]
+clap.workspace = true
+anyhow.workspace = true
+thiserror.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+toml.workspace = true
+walkdir = "2.5"
+aero-lexer = { path = "../aero-lexer" }
+aero-parser = { path = "../aero-parser" }
+aero-ast = { path = "../aero-ast" }
+aero-types = { path = "../aero-types" }
+aero-codegen = { path = "../aero-codegen" }
+avm-runtime = { path = "../avm-runtime" }
+
+[dev-dependencies]
+tempfile = "3.10"
+assert_cmd = "2.0"
+predicates = "3.1"
