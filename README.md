@@ -30,6 +30,52 @@ Start with the **[Whitepaper](./docs/whitepaper.md)** for the full vision, then 
 
 ---
 
+## Implementation Status
+
+**v0.1 Foundation (Q3 2026) — ✅ IN PROGRESS**
+
+The AERO compiler toolchain is now available as an independent Rust package:
+
+```
+aero_lang_system/
+├── aeroc/               # Main CLI compiler
+├── aero-lexer/          # Tokenization
+├── aero-parser/         # Syntax analysis
+├── aero-ast/            # Abstract Syntax Tree
+├── aero-types/          # Type checking
+├── aero-codegen/        # Bytecode generation
+└── avm-runtime/         # Virtual machine runtime
+```
+
+### Build from Source
+
+```bash
+# Clone the repository
+git clone https://github.com/somat3k/aero_lang_system.git
+cd aero_lang_system
+
+# Build the toolchain
+cargo build --release
+
+# The aeroc binary is now available at:
+# ./target/release/aeroc
+```
+
+### What's Working Now
+
+- ✅ Full CLI with all v0.1 subcommands (`new`, `check`, `build`, `run`, `test`, `fmt`)
+- ✅ Lexer with complete AERO syntax tokenization
+- ✅ Parser generating full AST with effect declarations
+- ✅ Basic type checking infrastructure
+- ✅ AVM bytecode generation (foundation)
+- ✅ VM runtime with placeholder execution
+- ✅ Project scaffolding with `aeroc new`
+- ✅ All unit tests passing
+
+See the [aeroc README](./aeroc/README.md) for detailed CLI usage and development guide.
+
+---
+
 ## Quick Start
 
 ```bash
