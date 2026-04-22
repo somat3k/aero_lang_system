@@ -554,9 +554,10 @@ instructions {
 }
 ```
 
-The compiler validates that every enforced statement maps to declared skills/capabilities before session startup. Invalid mappings fail fast with structured diagnostics.
+Before session startup, the compiler validates each `enforce` entry according to its directive category. Skill requirements such as `require_skill:...` must resolve to declared skills/capabilities, while policy and runtime directives such as `deny_unmapped_targets` and `emit_metrics:...` must match a supported directive name and any directive-specific arguments. Invalid entries fail fast with structured diagnostics.
 
 - `deny_unmapped_targets` blocks execution when an instruction references a data target (table, stream, shard, or channel) that has no declared mapping in the session.
+- `emit_metrics:latency,throughput,error_rate` enables emission of the named metrics and is validated against the supported metrics directive format and metric identifiers.
 - `topology` declares the orchestration graph shape (`planes`, `lanes`, `controllers`, `shards`) used by runtime placement and metrics labels.
 
 ---
