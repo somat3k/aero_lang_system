@@ -12,7 +12,7 @@
 2. [Goals](#2-goals)  
 3. [Linear-Driven Agentic Session Flow](#3-linear-driven-agentic-session-flow)  
 4. [Component Architecture](#4-component-architecture)  
-5. [Rust CLI Package (`aero-orchestrator`)](#5-rust-cli-package-aero-orchestrator)  
+5. [Rust CLI Package (`aero-linear`)](#5-rust-cli-package-aero-linear)  
 6. [Macro & Mapping Layer (IDE + Devices)](#6-macro--mapping-layer-ide--devices)  
 7. [Runtime Pylons, Shards, and Clusters](#7-runtime-pylons-shards-and-clusters)  
 8. [Warehouse Graveler Data Hub](#8-warehouse-graveler-data-hub)  
@@ -24,7 +24,7 @@
 
 ## 1. Overview
 
-This specification defines how AERO links **Linear projects** to **orchestrated agentic sessions**. A Linear mention (`@agent <content>`) becomes a typed request that spins up a skill-scoped session, executes enforced instructions, and reports progress back to Linear. The experience is delivered as a **standalone Rust package with a CLI** and exposed via gRPC/Proto for IDEs, devices, and other runtimes.
+This specification defines how AERO links **Linear projects** to **orchestrated agentic sessions**. A Linear mention (`@aero-agent <content>`) becomes a typed request that spins up a skill-scoped session, executes enforced instructions, and reports progress back to Linear. The experience is delivered as a **standalone Rust package with a CLI** (`aero-linear`) and exposed via gRPC/Proto for IDEs, devices, and other runtimes.
 
 The system also introduces **Warehouse Graveler** — a data transformer and interstellar hub that turns heterogeneous inputs into a graph of typed queries, backed by gRPC and a Graph Neural Network (GNN) for advanced classification and routing.
 
@@ -34,7 +34,7 @@ The system also introduces **Warehouse Graveler** — a data transformer and int
 
 | # | Goal |
 |---|------|
-| G1 | Zero-friction request path from Linear: an `@agent` mention creates a session with explicit instructions and capability bounds. |
+| G1 | Zero-friction request path from Linear: an `@aero-agent` mention creates a session with explicit instructions and capability bounds. |
 | G2 | First-class Rust package + CLI so teams can run orchestration locally, in CI, or as a managed service. |
 | G3 | Macro/mapping layer that works across languages and IDEs (proc-macros, decorators, code lenses) without duplicating logic. |
 | G4 | Runtime awareness of shards/clusters with metrics, skill inventory, and automatic discovery of available agents. |
@@ -45,7 +45,7 @@ The system also introduces **Warehouse Graveler** — a data transformer and int
 ## 3. Linear-Driven Agentic Session Flow
 
 1. **Intent** — User comments in Linear: `@aero-agent classify dataset X with policy Y`.
-2. **Webhook Intake** — Linear webhook posts to `aero-orchestrator` (`/linear/intake`), carrying issue context, actor, labels, and the mention payload.
+2. **Webhook Intake** — Linear webhook posts to `aero-linear` (`/linear/intake`), carrying issue context, actor, labels, and the mention payload.
 3. **Instruction Binding** — Orchestrator extracts structured instructions (skills, constraints, data refs) and binds them to a **Session** object with a capability token.
 4. **Shard Selection** — Scheduler picks shards (or spins new ones) matching requested skills and locality constraints; pylons route the session to the chosen shard/cluster.
 5. **Execution** — Agents run the task, calling Warehouse Graveler for transforms/classification when needed.
@@ -89,18 +89,20 @@ Shard Mesh (pylons)   Warehouse Graveler
 
 ---
 
-## 5. Rust CLI Package (`aero-orchestrator`)
+## 5. Rust CLI Package (`aero-linear`)
 
-CLI delivered as an independent Rust crate to keep orchestration portable and auditable.
+CLI delivered as an independent Rust crate (`aero-linear`) to keep orchestration portable and auditable. The crate name matches the roadmap deliverable (E-11); the binary is also named `aero-linear`.
 
 **Command surface (initial)**
 
 ```bash
-aero-orch init linear --api-key $LINEAR_TOKEN --team-id T123
-aero-orch register-skill classify --image docker.io/aero/classifier:edge --caps data.read,ml.infer
-aero-orch start-session --from-linear ISS-42 --skill classify --instruction "label @sensitive"
-aero-orch attach-instruction --session S123 --file policy.yaml
-aero-orch sync --push-status --emit-metrics
+# LINEAR_TOKEN must be set in the environment (never passed as a CLI argument)
+# export LINEAR_TOKEN=<your-token>
+aero-linear init linear --team-id T123
+aero-linear register-skill classify --image docker.io/aero/classifier:edge --caps data.read,ml.infer
+aero-linear start-session --from-linear ISS-42 --skill classify --instruction "label @sensitive"
+aero-linear attach-instruction --session S123 --file policy.yaml
+aero-linear sync --push-status --emit-metrics
 ```
 
 **Behaviors**
@@ -115,7 +117,7 @@ aero-orch sync --push-status --emit-metrics
 
 - **Rust proc-macros** for declaring skills and instruction schemas: `#[skill(name = "classify", caps = ["data.read"])]`.
 - **Language bridge**: TS/JS decorators and Python annotations generate the same session/skill schema via codegen (no divergent logic).
-- **IDE affordances**: code lens and quick-fix templates to emit `@agent` payloads directly from editors; uses the CLI in stdio mode.
+- **IDE affordances**: code lens and quick-fix templates to emit `@aero-agent` payloads directly from editors; uses the CLI in stdio mode.
 - **Device profiles**: mappings for constrained devices (edge/IoT) limit skill sets and enforce sandboxing.
 - **Mutant-based prototyping**: hot-reload macros so skill definitions can be mutated safely in dev; reconciler ensures schema drift is detected before deployment.
 
@@ -186,7 +188,7 @@ service GravelerService {
 
 ## 11. Incremental Rollout
 
-1. **Phase A — Intake & CLI Skeleton**: Linear webhook intake, session model, `aero-orch` CLI with `init`, `start-session`, `sync`.  
+1. **Phase A — Intake & CLI Skeleton**: Linear webhook intake, session model, `aero-linear` CLI with `init`, `start-session`, `sync`.  
 2. **Phase B — Shards & Pylons**: skill registry, placement engine, metrics export, IDE stdio integration.  
 3. **Phase C — Macros Across Environments**: proc-macros + TS/Python codegen, device profiles, mutation-safe hot reload.  
 4. **Phase D — Warehouse Graveler**: ingestion, transform/classify, GNN routing, gRPC/Proto GA.  
