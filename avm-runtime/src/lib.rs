@@ -69,6 +69,10 @@ impl VM {
     }
 
     pub fn execute(&mut self, bytecode: &Bytecode, _args: &[String]) -> Result<(), RuntimeError> {
+        // Reset execution state so the same VM instance can be reused for multiple runs
+        self.pc = 0;
+        self.stack.clear();
+
         // Placeholder VM execution
         // In the future, this will be a full register-based bytecode interpreter
 

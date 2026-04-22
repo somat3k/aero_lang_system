@@ -46,9 +46,19 @@ pub fn execute(path: PathBuf) -> Result<()> {
             Ok(tokens) => {
                 // Run parser
                 match aero_parser::parse(tokens) {
-                    Ok(_ast) => {
-                        println!(" ✓");
-                        checked_files += 1;
+                    Ok(ast) => {
+                        // Run type checker
+                        match aero_types::check(&ast) {
+                            Ok(_) => {
+                                println!(" ✓");
+                                checked_files += 1;
+                            }
+                            Err(e) => {
+                                println!(" ✗");
+                                eprintln!("Type error in {}: {}", file_path.display(), e);
+                                errors += 1;
+                            }
+                        }
                     }
                     Err(e) => {
                         println!(" ✗");

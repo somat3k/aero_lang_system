@@ -35,8 +35,9 @@ pub fn execute(path: PathBuf, check: bool) -> Result<()> {
         let ast = aero_parser::parse(tokens)
             .with_context(|| format!("Parse error in {}", file_path.display()))?;
 
-        // Format the AST
-        let formatted = aero_ast::format(&ast);
+        // Format the AST — propagates an error if any construct is unsupported
+        let formatted = aero_ast::format(&ast)
+            .with_context(|| format!("Format error in {}", file_path.display()))?;
 
         if source != formatted {
             needs_formatting += 1;
