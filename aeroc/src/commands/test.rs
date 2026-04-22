@@ -76,7 +76,7 @@ pub fn execute(path: PathBuf, filter: Option<String>) -> Result<()> {
 
             // In the future, we'll actually execute the test
             // For now, just check that it compiles
-            match aero_types::check_function(&test_fn) {
+            match aero_types::check_function(test_fn) {
                 Ok(_) => {
                     println!("ok");
                     passed_tests += 1;
