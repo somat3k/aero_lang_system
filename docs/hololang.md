@@ -529,6 +529,37 @@ Skills check:
 - **Effect compatibility** (skill's declared effects ⊆ session's granted capabilities),
 - **Device compatibility** (skill's required device types ⊆ session's declared devices).
 
+### Linear Pull Agent Sessions
+
+For Linear-driven delivery workflows, sessions can declare orchestrated agent requests using `@agent` blocks. This keeps `@`-addressed requests, instruction policy, and runtime enforcement in one place.
+`linear_pull` represents a project-synchronised session bootstrap: it binds a session to a Linear project feed and continuously materialises task updates into the active orchestration context.
+
+```hololang
+linear_pull ProjectDelivery {
+    source: "linear://project/AERO-42"
+    mode:   "orchestrated"
+}
+
+@agent("warehouse_graveler")
+instructions {
+    intent: "transform-and-classify"
+    enforce: [
+        "require_skill:data_transform",
+        "require_skill:data_classification",
+        "deny_unmapped_targets",
+        "emit_metrics:latency,throughput,error_rate"
+    ]
+    transport: "grpc+proto"
+    topology:  "planes,lanes,controllers,shards"
+}
+```
+
+Before session startup, the compiler validates each `enforce` entry according to its directive category. Skill requirements such as `require_skill:...` must resolve to declared skills/capabilities, while policy and runtime directives such as `deny_unmapped_targets` and `emit_metrics:...` must match a supported directive name and any directive-specific arguments. Invalid entries fail fast with structured diagnostics.
+
+- `deny_unmapped_targets` blocks execution when an instruction references a data target (table, stream, shard, or channel) that has no declared mapping in the session.
+- `emit_metrics:latency,throughput,error_rate` enables emission of the named metrics and is validated against the supported metrics directive format and metric identifiers.
+- `topology` declares the orchestration graph shape (`planes`, `lanes`, `controllers`, `shards`) used by runtime placement and metrics labels.
+
 ---
 
 ## 12. DocDirectory Generation

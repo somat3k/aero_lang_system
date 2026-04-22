@@ -105,6 +105,7 @@ Every milestone below advances that vision by making AERO more expressive, more 
 | E-08 | Cluster protocol v1 | Multi-node AVM deployment, remote ActorRef |
 | E-09 | Data classification | `@sensitive` annotation, redaction enforcement |
 | E-10 | Documentation site | `docs.aero-lang.dev` — searchable, versioned |
+| E-11 | `aero-linear` Rust CLI | Independent Rust package for Linear pull orchestration, `@agent` session requests, and enforceable instruction mappings |
 
 **Definition of Done:** An external contributor can publish a package to the registry and have it consumed by a third project using only public tooling.
 
