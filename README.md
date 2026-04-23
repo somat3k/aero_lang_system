@@ -19,6 +19,7 @@ All project documentation lives in the [`docs/`](./docs/) folder:
 | [⚙️ OS Design](./docs/os_design.md) | AeroOS — programming-oriented, capability-based operating system |
 | [🌐 Network Architecture](./docs/network_architecture.md) | Lean, programmable network layer: data / control / management planes |
 | [🏗 Architecture](./docs/architecture.md) | AERO runtime: compiler pipeline, AVM, scheduler, GC, observability |
+| [🤖 Agentic Orchestration](./docs/agentic_orchestration.md) | Linear-driven agent sessions, Rust CLI package, shards/pylons, Warehouse Graveler data hub |
 | [📐 Design Principles](./docs/design_principles.md) | Core philosophy, language tenets, and coding conventions |
 | [🚀 Getting Started](./docs/getting_started.md) | Installation, first program, and guided project walkthrough |
 | [📚 API Reference](./docs/api_reference.md) | Comprehensive language and runtime API reference |
